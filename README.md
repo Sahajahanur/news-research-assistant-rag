@@ -37,7 +37,7 @@ Built with LangChain + Gemini + FAISS (RAG architecture)
 ## 3. Business Problem
 Finding one specific fact — a price, a feature, a safety spec — inside a long news article means reading through the whole thing. That gets worse as the number of articles grows, or when the answer is scattered across more than one source.
 
-**Framed as a business question:**
+**Business Question:**
 > How can a user retrieve relevant information from multiple news articles quickly, without manually reading the entire articles?
 
 This is an information-retrieval and research-efficiency problem before it is a technology problem — RAG is simply the mechanism used to solve it.
@@ -147,17 +147,17 @@ RockyBot doesn't generate business insights on its own data — it enables **inf
 
 **Tested example — direct feature question:**
 
-![Answering a direct feature question, with sources shown](images/research_tool_qa.png)
+![Answering a direct feature question, with sources shown](research_tool.png)
 
-> **Q:** "What are the main features of Punch iCNG?"
-> **A:** Twin-cylinder technology with a micro-switch and thermal incident protection, a voice-assisted electric sunroof, automatic projector headlamps, LED DRLs, 16-inch alloy wheels, a 7-inch Harman infotainment system with Android Auto/Apple CarPlay, rain-sensing wipers, and a height-adjustable driver's seat.
+> **Business Question:** "What are the main features of Punch iCNG?"
+> **Answer:** Twin-cylinder technology with a micro-switch and thermal incident protection, a voice-assisted electric sunroof, automatic projector headlamps, LED DRLs, 16-inch alloy wheels, a 7-inch Harman infotainment system with Android Auto/Apple CarPlay, rain-sensing wipers, and a height-adjustable driver's seat.
 
 **Tested example — summarization:**
 
-![Summarizing the article into 3 points, with sources shown](images/research_tool_summary.png)
+![Summarizing the article into 3 points, with sources shown](research_tool_summary.png)
 
-> **Q:** "Summarize the Punch iCNG article in 3 points."
-> **A:**
+> **Business Question:** "Summarize the Punch iCNG article in 3 points."
+> **Answer:**
 > 1. Tata Motors launched the Punch iCNG, priced from ₹7.1 lakh to ₹9.68 lakh (ex-showroom, Delhi)
 > 2. It uses twin-cylinder technology with safety measures including a refuelling micro-switch and thermal incident protection
 > 3. It includes an electric sunroof, projector headlamps, LED DRLs, alloy wheels, infotainment, rain-sensing wipers, and a height-adjustable driver's seat
@@ -195,11 +195,11 @@ In each case, the answer was generated from the indexed article content, with th
 
 ## 14. How to Run
 ```bash
-git clone <repo-url>
-cd rockybot
+git clone https://github.com/Sahajahanur/news-research-assistant-rag.git
+cd news-research-assistant-rag
 pip install -r requirements.txt
 ```
-Add your Gemini API key to `secret_key.py` (not committed — see `.gitignore`), then:
+Add your Gemini API key as an environment variable or local config (not committed — see `.gitignore`), then:
 ```bash
 streamlit run main.py
 ```
@@ -207,18 +207,15 @@ Enter up to 3 news article URLs in the sidebar, click **Process URLs**, then ask
 
 ## 15. Project Structure
 ```
-rockybot/
+news-research-assistant-rag/
 │
-├── main.py               # Streamlit app + RAG pipeline logic
-├── secret_key.py          # Local-only, holds the Gemini API key (not committed)
-├── requirements.txt       # Project dependencies
-├── images/
-│   ├── research_tool_qa.png
-│   └── research_tool_summary.png
-├── vector_index/
-│   ├── index.faiss        # FAISS vector index
-│   └── index.pkl          # FAISS index metadata
-│
+├── main.py                     # Streamlit app + RAG pipeline logic
+├── requirements.txt             # Project dependencies
+├── notebook/                    # Experimentation / development notebook(s)
+├── research_tool.png            # Screenshot — direct question example
+├── research_tool_summary.png    # Screenshot — summarization example
+├── Project_Report.pdf           # Full project report
+├── .gitignore
 └── README.md
 ```
 
