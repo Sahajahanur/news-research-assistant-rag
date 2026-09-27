@@ -4,6 +4,8 @@ A Retrieval-Augmented Generation (RAG) application that turns a set of news arti
 
 *Portfolio-level implementation of an industry-standard RAG architecture, built with Python, LangChain, Google Gemini, and FAISS.*
 
+📄 **[Read the full Project Report (PDF)](Project_Report.pdf)** — detailed architecture, RAG concepts, implementation challenges, and validation.
+
 ---
 
 ## 1. Project Snapshot — 6 Questions
@@ -96,39 +98,39 @@ Each piece exists to remove one manual step from the research process:
 
 ## 7. Architecture
 
-**Ingestion pipeline:**
-```
-News Article URLs
-        ↓
-UnstructuredURLLoader
-        ↓
-Extracted Text
-        ↓
-RecursiveCharacterTextSplitter
-        ↓
-Document Chunks
-        ↓
-Gemini Embeddings
-        ↓
-FAISS Vector Store
+The system runs in two stages: an **ingestion pipeline** that indexes the supplied articles (run once per set of URLs), and a **query pipeline** that answers questions against that index (run once per question).
+
+```mermaid
+flowchart TD
+    subgraph ING["📥 INGESTION PIPELINE — runs once per set of URLs"]
+        A[News Article URLs] --> B[UnstructuredURLLoader]
+        B --> C[Extracted Text]
+        C --> D[RecursiveCharacterTextSplitter]
+        D --> E[Document Chunks]
+        E --> F[Gemini Embedding Model]
+        F --> G[(FAISS Vector Store)]
+    end
+
+    subgraph QRY["🔎 QUERY PIPELINE — runs once per question"]
+        H[User Question] --> I[Gemini Embedding Model]
+        I --> J[Query Vector]
+        J --> K[FAISS Similarity Search]
+        K --> L[Relevant Chunks]
+        L --> M[LangChain RAG Chain]
+        M --> N[Gemini LLM]
+        N --> O[Answer + Source URL]
+    end
+
+    G -.indexed data used by.-> K
 ```
 
-**Query pipeline:**
-```
-User Question
-        ↓
-Gemini Embedding
-        ↓
-FAISS Similarity Search
-        ↓
-Relevant Chunks
-        ↓
-LangChain RAG Chain
-        ↓
-Gemini LLM
-        ↓
-Answer + Source URL
-```
+**Component responsibilities:**
+| Component | Role |
+|---|---|
+| FAISS | Retrieval / similarity search only |
+| Gemini LLM | Reasoning and answer generation only |
+| LangChain | Orchestration layer connecting retriever, context, and LLM |
+| Streamlit | User interface only |
 
 ## 8. How RAG Works
 - **Gemini Embeddings** convert article text and user questions into numerical vectors that capture meaning, not just keywords.
